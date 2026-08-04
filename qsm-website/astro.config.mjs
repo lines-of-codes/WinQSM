@@ -83,7 +83,13 @@ export default defineConfig({
                             slug: "qsmweb/guides/introduction",
                         },
                         { slug: "qsmweb/guides/security" },
-                        { slug: "qsmweb/guides/linux-build" },
+                        {
+                            label: "Installation",
+                            items: [
+                                { slug: "qsmweb/guides/linux-build" },
+                                { slug: "qsmweb/guides/podman" },
+                            ],
+                        },
                     ],
                 },
                 {

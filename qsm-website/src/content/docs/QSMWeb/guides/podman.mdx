@@ -1,0 +1,62 @@
+---
+title: Podman/Docker
+description: Setting up QSM.Web within containers
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+This guide will help you set up QSM.Web within Podman or Docker.
+
+## Prerequisites
+
+1. Podman or Docker
+2. Podman Compose or Docker Compose
+3. Git
+
+## Steps
+
+First, Clone the Git repository and go into the directory by running:
+
+```bash
+git clone https://github.com/lines-of-codes/QSMSharp.git
+cd QSMSharp
+```
+
+QSM.Web uses Docker Hardened Images (DHI) by default, so you'll need to log into DHI
+first with your Docker account credentials and pull images used by QSM by running
+
+<Tabs syncKey="program">
+    <TabItem label="Podman">
+        ```bash
+        podman login dhi.io
+        podman pull dhi.io/dotnet:10-sdk-alpine
+        podman pull dhi.io/aspnetcore:10-alpine
+        ```
+    </TabItem>
+    <TabItem label="Docker">
+        ```bash
+        docker login dhi.io
+        docker pull dhi.io/dotnet:10-sdk-alpine
+        docker pull dhi.io/aspnetcore:10-alpine
+        ```
+    </TabItem>
+</Tabs>
+
+Now, Simply run the following to build and run QSM.Web:
+
+<Tabs syncKey="program">
+    <TabItem label="Podman">
+        ```bash
+        podman compose up --build -d
+        ```
+    </TabItem>
+    <TabItem label="Docker">
+        ```bash
+        docker compose up --build -d
+        ```
+    </TabItem>
+</Tabs>
+
+The server will be started on http://localhost:8080 (and binds to all interfaces), feel
+free to [adjust the port mapping](https://docs.docker.com/reference/compose-file/services/#ports)
+within the `compose.yaml` file.

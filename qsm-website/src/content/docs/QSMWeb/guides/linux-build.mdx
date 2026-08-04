@@ -60,6 +60,10 @@ This guide will walk you through building and installing QSM.Web on your system.
 
 </Steps>
 
+By default, the web console will be started on port 5222 and will accept connections
+from anywhere. But do remember that if you want to access the console from other
+devices, you'll need to configure your firewall if you have one.
+
 The systemd unit will start QSM.Web under the `qsmweb` user with the
 `/usr/local/lib/qsm-web` working directory. You'll want to remove the `User` and `Group`
 property if you did not create the `qsmweb` user (although that's not recommended), and
