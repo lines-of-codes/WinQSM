@@ -15,6 +15,10 @@
 
 <h3>Java</h3>
 
+<p>
+    Total System Memory: @(_totalMemoryGib.ToString("F2")) GiB
+</p>
+
 <EditForm Model="Input" FormName="MiscOptions" OnValidSubmit="OptionsSubmitted">
     <DataAnnotationsValidator/>
     <ValidationSummary class="text-danger" role="alert"/>
@@ -32,13 +36,13 @@
             </div>
             <div class="form-floating mb-2">
                 <InputNumber @bind-Value="Input.InitMemoryPoolSize" id="Input.InitMemoryPoolSize" class="form-control"
-                             aria-required="true" placeholder="" min="0"/>
+                             aria-required="true" placeholder="" min="0" step="0.5" max="@(Math.Floor(_totalMemoryGib))"/>
                 <label for="Input.InitMemoryPoolSize" class="form-label">Initial Memory Size (GiB)</label>
                 <ValidationMessage For="() => Input.InitMemoryPoolSize" class="text-danger"/>
             </div>
             <div class="form-floating mb-2">
                 <InputNumber @bind-Value="Input.MaxMemoryPoolSize" id="Input.MaxMemoryPoolSize" class="form-control"
-                             aria-required="true" placeholder="" min="0"/>
+                             aria-required="true" placeholder="" min="0" step="0.5" max="@(Math.Floor(_totalMemoryGib))" />
                 <label for="Input.MaxMemoryPoolSize" class="form-label">Max Memory Size (GiB)</label>
                 <ValidationMessage For="() => Input.MaxMemoryPoolSize" class="text-danger"/>
             </div>
@@ -86,11 +90,13 @@
     
     ServerInstance? _server;
     ServerSettings? _settings;
-    private Toast _savedToast = null!;
+    Toast _savedToast = null!;
+    double _totalMemoryGib = 0;
 
     protected override void OnInitialized()
     {
         Input ??= new JavaSettings();
+        _totalMemoryGib = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes / (1024.0 * 1024 * 1024);
     }
 
     protected override async Task OnInitializedAsync()
@@ -117,10 +123,7 @@
     {
         if (_server == null) return;
                 
-        if (_settings == null)
-        {
-            _settings = new ServerSettings();
-        }
+        _settings ??= new ServerSettings();
 
         _settings.Java = Input!;
         

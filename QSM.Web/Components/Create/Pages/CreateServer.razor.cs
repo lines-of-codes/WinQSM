@@ -59,13 +59,7 @@ public partial class CreateServer : ComponentBase
 			return "/usr/local/etc/qsm-web/servers/";
 		}
 
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-		{
-			return @"C:\ProgramData\QSMWeb\Servers\";
-		}
-		// TODO: Add default path for macOS
-
-		return string.Empty;
+		return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\ProgramData\QSMWeb\Servers\" : "./";
 	}
 
 	protected override async Task OnInitializedAsync()
