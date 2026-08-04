@@ -10,14 +10,14 @@ QSM Web store its data at the following location on various operating systems:
 - Linux: `/var/lib/qsm-web`
 - FreeBSD: `/usr/local/etc/qsm-web/`
 - Windows: `C:\ProgramData\QSMWeb\`
-- macOS: Does not have a static location. Please help and contribute by adding a proper path to store data [here](https://github.com/lines-of-codes/QSMSharp/blob/6b1f2222d7b18e8ade888e2904d4ddc95161b8fe/QSM.Web/Data/ApplicationConfig.cs#L16).
+- macOS: The program's current working directory.
 
 ## Directory Structure
 
 Similar to the nature of QSM Windows, QSM Web has the following filesystem structure:
 
 <FileTree>
-    
+
     - config.json Application-wide settings
     - downloads/
     - logs/
@@ -26,5 +26,5 @@ Similar to the nature of QSM Windows, QSM Web has the following filesystem struc
         - [server_name]
             - config.qsm.json Server-specific QSM-only configuration
             - ...
-    
+
 </FileTree>

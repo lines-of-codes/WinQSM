@@ -1,0 +1,97 @@
+---
+title: Linux Build Guide
+description: Building QSM.Web on Linux
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+This guide will walk you through building and installing QSM.Web on your system.
+
+## Prerequisites
+
+1. Download & Install the .NET SDK (https://dotnet.microsoft.com/en-us/download)
+2. Git
+
+## Build Steps
+
+<Steps>
+
+1. Use Git to clone the repository, go into the QSM.Web directory, and build the program
+
+    ```bash
+    git clone https://github.com/lines-of-codes/QSMSharp.git
+    cd QSM.Web
+    dotnet publish -c Release
+    ```
+
+2. Copy the build files in the `bin/Release/net10.0/publish` folder to `/usr/local/lib/qsm-web/` (or alternatively, `/opt/qsm-web/`)
+
+    ```bash
+    sudo cp -r bin/Release/net10.0/publish/* /usr/local/lib/qsm-web/
+    ```
+
+3. Create the `/var/lib/qsm-web` folder
+4. (Recommended) Create a user for QSM and ensure the folders created in the previous step is writable
+
+    ```bash
+    sudo useradd -d /var/lib/qsm-web qsmweb
+    sudo chown qsmweb:qsmweb /var/lib/qsm-web
+    ```
+
+5. Run the `QSM.Web` executable! You can use `tmux` or use the following systemd unit file:
+
+    ```systemd
+    # /etc/systemd/system/qsm-web.service
+    [Unit]
+    Description=QSM Web console
+    Wants=network-online.target
+    After=network-online.target
+
+    [Service]
+    User=qsmweb
+    Group=qsmweb
+    WorkingDirectory=/usr/local/lib/qsm-web
+    ExecStart=/usr/local/lib/qsm-web/QSM.Web
+    StandardInput=null
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+</Steps>
+
+The systemd unit will start QSM.Web under the `qsmweb` user with the
+`/usr/local/lib/qsm-web` working directory. You'll want to remove the `User` and `Group`
+property if you did not create the `qsmweb` user (although that's not recommended), and
+change the `ExecStart` property if you did not place QSM.Web at `/usr/local/lib/qsm-web`
+
+QSM.Web (or rather, the ASP.NET underneath) reads `appconfig.json` from the current
+working directory, so if you wish to change where that config file is placed (for
+example, to `/var/lib/qsm-web`), you'll want to change the working directory.
+
+## OpenRC
+
+For users who uses OpenRC, such as running in Alpine containers, You can use the
+following OpenRC service script instead:
+
+```bash
+# /etc/init.d/qsm-web
+#!/sbin/openrc-run
+command=/usr/local/lib/qsm-web/QSM.Web
+command_background=true
+command_user="qsmweb:qsmweb"
+pidfile="/run/${RC_SVCNAME}.pid"
+
+directory="/usr/local/lib/qsm-web"
+
+depend() {
+    need net
+}
+```
+
+Then you can simply add the service to the default runlevel and start it.
+
+```bash
+rc-update add qsm-web default
+rc-service qsm-web start
+```

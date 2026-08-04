@@ -83,6 +83,7 @@ export default defineConfig({
                             slug: "qsmweb/guides/introduction",
                         },
                         { slug: "qsmweb/guides/security" },
+                        { slug: "qsmweb/guides/linux-build" },
                     ],
                 },
                 {
