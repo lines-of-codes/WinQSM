@@ -132,10 +132,10 @@ public class PaperMCHangarProvider : ModPluginProvider
 
 				return new ModPluginDownloadInfo.Dependency
 				{
-					Name = dependency.Name!,
+					Name = dependency.Name,
 					DownloadUri = downloadUri,
 					ExternalPageUrl = dependency.ExternalPageUrl,
-					Required = dependency.Required!
+					Required = dependency.Required
 				};
 			}));
 
