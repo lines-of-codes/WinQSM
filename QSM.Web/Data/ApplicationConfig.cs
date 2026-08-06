@@ -6,14 +6,15 @@ namespace QSM.Web.Data;
 public class ApplicationConfig
 {
 	public const string HttpDownloadClient = "HttpDownload";
-	
-	public static string DownloadsFolder => Path.Join(GetDefaultAppDataFolder(), "downloads");
+
+	public static string AppFolder { get; private set; } = GetDefaultAppDataFolder();
+	public static string DownloadsFolder => Path.Join(AppFolder, "downloads");
 	
 	public List<string> JavaInstalls { get; set; } = [];
 	public string? DefaultJavaInstall { get; set; }
 	public int ConcurrentDownloads { get; set; } = 5;
 	
-	public static string GetDefaultAppDataFolder()
+	private static string GetDefaultAppDataFolder()
 	{
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			return "/var/lib/qsm-web/";
@@ -57,10 +58,13 @@ public class ApplicationConfig
 		JsonSerializer.Serialize(stream, this, typeof(ApplicationConfig), ApplicationConfigContext.Default);
 	}
 
-	public static void EnsureFolderExists()
+	public static void EnsureFolderExists(string? appFolder)
 	{
-		string appFolder = GetDefaultAppDataFolder();
+		if (!string.IsNullOrWhiteSpace(appFolder))
+		{
+			AppFolder = appFolder;
+		}
 
-		Directory.CreateDirectory(Path.Join(appFolder, "downloads"));
+		Directory.CreateDirectory(Path.Join(AppFolder, "downloads"));
 	}
 }

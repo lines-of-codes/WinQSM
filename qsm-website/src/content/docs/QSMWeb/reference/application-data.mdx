@@ -5,7 +5,7 @@ description: Where QSM Web stores its data.
 
 import { FileTree } from "@astrojs/starlight/components";
 
-QSM Web store its data at the following location on various operating systems:
+QSM Web store its data at the following location *by default* on various operating systems:
 
 - Linux: `/var/lib/qsm-web`
 - FreeBSD: `/usr/local/etc/qsm-web/`
@@ -28,3 +28,16 @@ Similar to the nature of QSM Windows, QSM Web has the following filesystem struc
             - ...
 
 </FileTree>
+
+## Changing the data location
+
+You can change where the data folder is located by editing `appsettings.json` and add the `QSM:DataFolder` configuration
+key to it, as follows:
+
+```json
+  "QSM": {
+    "DataFolder": "/abc/def"
+  }
+```
+
+Or you can use the environment variable `QSM__DataFolder`

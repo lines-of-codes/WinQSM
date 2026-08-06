@@ -238,7 +238,7 @@ else
 
         InstallFormData ??= string.Empty;
 
-        var appData = ApplicationConfig.GetDefaultAppDataFolder();
+        var appData = ApplicationConfig.AppFolder;
         _installPath = Path.Join(appData, "qbs/qbsgo");
         _backupSystem = new BackupSystem(_installPath);
 
@@ -369,7 +369,7 @@ else
         
         Directory.Delete(extractedDir, true);
         
-        var appData = ApplicationConfig.GetDefaultAppDataFolder();
+        var appData = ApplicationConfig.AppFolder;
         _configFile = Path.Join(appData, "qbs/qbsgo.toml");
         
         if (!_installed && File.Exists(_configFile))

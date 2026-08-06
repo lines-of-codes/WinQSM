@@ -19,13 +19,13 @@ internal static class Program
 
 	public static async Task Main(string[] args)
 	{
-		ApplicationConfig.EnsureFolderExists();
-
 		Log.Logger = new LoggerConfiguration()
 			.WriteTo.Console()
 			.CreateBootstrapLogger();
 		
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+		
+		ApplicationConfig.EnsureFolderExists(builder.Configuration.GetValue<string>("QSM:DataFolder"));
 
 		builder.Services.AddSerilog((services, lc) => lc
 			.ReadFrom.Configuration(builder.Configuration)
@@ -33,7 +33,7 @@ internal static class Program
 			.Enrich.FromLogContext()
 			.WriteTo.Console()
 			.WriteTo.File(
-				Path.Join(ApplicationConfig.GetDefaultAppDataFolder(), "logs", "log.log"), 
+				Path.Join(ApplicationConfig.AppFolder, "logs", "log.log"), 
 				rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true));
 
 		// Add services to the container.

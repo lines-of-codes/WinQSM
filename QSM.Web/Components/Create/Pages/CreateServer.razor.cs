@@ -49,17 +49,7 @@ public partial class CreateServer : ComponentBase
 
 	private static string GetDefaultServerPath()
 	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-		{
-			return "/var/lib/qsm-web/servers/";
-		}
-
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-		{
-			return "/usr/local/etc/qsm-web/servers/";
-		}
-
-		return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\ProgramData\QSMWeb\Servers\" : "./";
+		return Path.Join(ApplicationConfig.AppFolder, "servers");
 	}
 
 	protected override async Task OnInitializedAsync()

@@ -1,5 +1,4 @@
 @page "/Create/CurseForge"
-@using System.ComponentModel.DataAnnotations
 @using Ganss.Xss
 @using Markdig
 @using QSM.Core.ModPluginSource
@@ -21,6 +20,7 @@
 
 @if (_askMoreInfo)
 {
+    <button class="btn btn-link text-decoration-none p-0 mb-2" @onclick="() => { _askMoreInfo = false; }"><i class="bi bi-arrow-left"></i> Back</button>
     <EditForm Model="CreationDataForm" OnValidSubmit="CreateDataSubmit" class="col-md-6">
         <div class="form-floating mb-2">
             <InputText @bind-Value="CreationDataForm!.Name" @oninput="NameInputChanged" id="Model.Name" class="form-control"
@@ -193,7 +193,7 @@ else
         _askMoreInfo = true;
         _selectedVersion = _downloadInfos?.FirstOrDefault(info => info.VersionId == SelectedModpackVersion);
         CreationDataForm!.Name = _selectedMod?.Name ?? string.Empty;
-        CreationDataForm.Path = Path.Join(ApplicationConfig.GetDefaultAppDataFolder(), "servers");
+        CreationDataForm.Path = Path.Join(ApplicationConfig.AppFolder, "servers");
         SetTargetFolderPreview(CreationDataForm.Path, CreationDataForm.Name);
     }
     

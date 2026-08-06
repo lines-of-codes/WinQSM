@@ -72,7 +72,7 @@
 
     protected override void OnInitialized()
     {
-        _configFile = Path.Join(ApplicationConfig.GetDefaultAppDataFolder(), "qbs/qbsgo.toml");
+        _configFile = Path.Join(ApplicationConfig.AppFolder, "qbs/qbsgo.toml");
         _config = TomlSerializer.Deserialize(File.ReadAllText(_configFile), BackupConfigContext.Default.BackupConfig)!;
 
         if (_config.Remotes.TryGetValue(Name, out var remote))
