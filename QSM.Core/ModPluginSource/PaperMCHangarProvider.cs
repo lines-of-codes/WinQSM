@@ -1,4 +1,5 @@
-﻿using QSM.Core.ServerSoftware;
+﻿using JetBrains.Annotations;
+using QSM.Core.ServerSoftware;
 using System.Net;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
@@ -7,7 +8,8 @@ using HashAlgorithm = QSM.Core.Utilities.HashAlgorithm;
 
 namespace QSM.Core.ModPluginSource;
 
-public class PaperMCHangarProvider : ModPluginProvider
+[PublicAPI]
+public class PaperMCHangarProvider(IHttpClientFactory httpClientFactory) : ModPluginProvider
 {
 	public const string HttpClientName = "PaperMCHangarApi";
 	public const string BaseAddress = "https://hangar.papermc.io/api/v1/";
@@ -17,13 +19,6 @@ public class PaperMCHangarProvider : ModPluginProvider
 	/// </summary>
 	private const ushort RateLimitResetTime = 5000;
 
-	private readonly IHttpClientFactory _httpClientFactory;
-
-	public PaperMCHangarProvider(IHttpClientFactory httpClientFactory)
-	{
-		_httpClientFactory = httpClientFactory;
-	}
-
 	public override async Task<ModPluginDownloadInfo[]> GetVersionsAsync(string slug, ServerMetadata? serverMetadata = null)
 	{
 		if (serverMetadata is null)
@@ -31,7 +26,7 @@ public class PaperMCHangarProvider : ModPluginProvider
 			return [];
 		}
 
-		using HttpClient client = _httpClientFactory.CreateClient(HttpClientName);
+		using HttpClient client = httpClientFactory.CreateClient(HttpClientName);
 
 		VersionRequest response = await client.GetFromJsonAsync<VersionRequest>(
 									  $"projects/{slug}/versions?platform={serverMetadata.Software}&platformVersion={serverMetadata.MinecraftVersion}")
@@ -65,10 +60,10 @@ public class PaperMCHangarProvider : ModPluginProvider
 			versions.Add(new ModPluginDownloadInfo(version.Id.ToString())
 			{
 				DisplayName = $"{version.Name!} ({version.Channel!.Name})",
-				FileName = downloadEntry.FileInfo!.Name!,
+				FileName = downloadEntry.FileInfo.Name!,
 				DownloadUri = downloadEntry.DownloadUrl,
 				ExternalPageUrl = downloadEntry.ExternalUrl,
-				Dependencies = genericInfo.ToArray(),
+				Dependencies = [.. genericInfo],
 				Hash = downloadEntry.FileInfo.Sha256Hash,
 				HashAlgorithm = HashAlgorithm.Sha256
 			});
@@ -92,7 +87,7 @@ public class PaperMCHangarProvider : ModPluginProvider
 			route += $"query={WebUtility.UrlEncode(query)}";
 		}
 
-		using HttpClient client = _httpClientFactory.CreateClient(HttpClientName);
+		using HttpClient client = httpClientFactory.CreateClient(HttpClientName);
 
 		SearchRequest response = await client.GetFromJsonAsync<SearchRequest>(route)
 								 ?? throw new NetworkResourceUnavailableException();
@@ -146,7 +141,7 @@ public class PaperMCHangarProvider : ModPluginProvider
 
 	public override async Task<ModPluginInfo> GetDetailedInfoAsync(ModPluginInfo modPlugin)
 	{
-		using HttpClient client = _httpClientFactory.CreateClient(HttpClientName);
+		using HttpClient client = httpClientFactory.CreateClient(HttpClientName);
 		modPlugin.LongDescription =
 			await client.GetStringAsync($"https://hangar.papermc.io/api/v1/pages/main/{modPlugin.Slug}");
 
@@ -155,7 +150,7 @@ public class PaperMCHangarProvider : ModPluginProvider
 
 	private async Task<HangarProject?> GetProjectFromHash(string hash)
 	{
-		using HttpClient client = _httpClientFactory.CreateClient(HttpClientName);
+		using HttpClient client = httpClientFactory.CreateClient(HttpClientName);
 
 		try
 		{

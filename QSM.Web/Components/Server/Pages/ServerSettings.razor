@@ -1,4 +1,5 @@
 @page "/Server/{Id:int:min(0)}/Settings"
+@using QSM.Web.Components.Shared
 
 <PageTitle>Settings - QSM Web Console</PageTitle>
 
@@ -6,142 +7,60 @@
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/World")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">World Generation</h5>
-                    <p class="card-text">
-                        Manage your world generation settings.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-globe"
+                  Title="World Generation"
+                  Description="Manage your world generation settings."
+                  href=@($"Server/{Id}/Settings/World") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Gameplay")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Gameplay Settings</h5>
-                    <p class="card-text">
-                        Adjust the game's difficulty & similar options.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-controller"
+                  Title="Gameplay Settings"
+                  Description="Adjust the game's difficulty & similar options."
+                  href=@($"Server/{Id}/Settings/Gameplay") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Performance")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Server Performance</h5>
-                    <p class="card-text">
-                        Settings important to the server's performance.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-bar-chart"
+                  Title="Server Performance"
+                  Description="Settings important to the server's performance."
+                  href=@($"Server/{Id}/Settings/Performance") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Network")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Network Settings</h5>
-                    <p class="card-text">
-                        Network-related options, such as the IP and Port.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-router"
+                  Title="Network Settings"
+                  Description="Network-related options, such as the IP and Port."
+                  href=@($"Server/{Id}/Settings/Network") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Interactions")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Player Interactions</h5>
-                    <p class="card-text">
-                        Manage how the player interacts with the world.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-people"
+                  Title="Player Interactions"
+                  Description="Manage how the player interacts with the world."
+                  href=@($"Server/{Id}/Settings/Interactions") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Security")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Server Security</h5>
-                    <p class="card-text">
-                        Settings which may affect the server's security, such as
-                        online mode.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-lock"
+                  Title="Server Security"
+                  Description="Settings which may affect the server's security, 
+                  such as online mode."
+                  href=@($"Server/{Id}/Settings/Security") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Java")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Java</h5>
-                    <p class="card-text">
-                        Change settings related to the Java install used for this
-                        instance.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-terminal"
+                  Title="Java"
+                  Description="Change settings related to the Java install used for this instance."
+                  href=@($"Server/{Id}/Settings/Java") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Backups")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Backups</h5>
-                    <p class="card-text">
-                        Manage & change settings regarding backups.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-archive"
+                  Title="Backups"
+                  Description="Manage & change settings regarding backups."
+                  href=@($"Server/{Id}/Settings/Backups") />
     </div>
     <div class="col">
-        <a class="card text-decoration-none" href=@($"Server/{Id}/Settings/Misc")>
-            <div class="card-body">
-                <div>
-                    <h5 class="card-title">Miscellaneous</h5>
-                    <p class="card-text">
-                        Other settings such as the MOTD, idle timeout, rate
-                        limiting, and resource packs.
-                    </p>
-                </div>
-                <div class="d-flex justify-content-end">
-                    <i class="bi bi-arrow-right"></i>
-                </div>
-            </div>
-        </a>
+        <LinkCard TitleIcon="bi-three-dots"
+                  Title="Miscellaneous"
+                  Description="Other settings such as the MOTD, idle timeout, rate
+                               limiting, and resource packs."
+                  href=@($"Server/{Id}/Settings/Misc") />
     </div>
 </div>
 

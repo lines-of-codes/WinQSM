@@ -6,14 +6,14 @@ public static class StringUtility
 	{
 		char[] invalidChars = Path.GetInvalidFileNameChars();
 
-		if (folderName.IndexOfAny(invalidChars) != -1)
-		{
-			folderName = string.Join("", folderName.Split(invalidChars));
+		if (folderName.IndexOfAny(invalidChars) == -1)
+			return folderName;
 
-			if (folderName.Length == 0)
-			{
-				folderName = Path.GetRandomFileName();
-			}
+		folderName = string.Join("", folderName.Split(invalidChars));
+
+		if (folderName.Length == 0)
+		{
+			folderName = Path.GetRandomFileName();
 		}
 
 		return folderName;

@@ -1,3 +1,4 @@
+@using System.Buffers
 @using System.Security.Cryptography
 @using Microsoft.EntityFrameworkCore
 @using QSM.Core
@@ -110,24 +111,32 @@ else
         await using var contentStream = await response.Content.ReadAsStreamAsync();
         await using var fileStream = File.Create(dest);
 
-        var buffer = new byte[8192];
+        var pool = ArrayPool<byte>.Shared;
+        var buffer = pool.Rent(8192);
         long totalBytesRead = 0;
-        int bytesRead;
 
         if (totalBytes == -1)
         {
             _downloadProgress[index].Percentage = null;
         }
 
-        while ((bytesRead = await contentStream.ReadAsync(buffer)) > 0)
+        try
         {
-            await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
-            totalBytesRead += bytesRead;
+            int bytesRead;
+            while ((bytesRead = await contentStream.ReadAsync(buffer)) > 0)
+            {
+                await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead));
+                totalBytesRead += bytesRead;
 
-            if (totalBytes == -1) continue;
-            
-            _downloadProgress[index].Percentage = (double)totalBytesRead / totalBytes * 100;
-            await InvokeAsync(StateHasChanged);
+                if (totalBytes == -1) continue;
+
+                _downloadProgress[index].Percentage = (double)totalBytesRead / totalBytes * 100;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        finally
+        {
+            pool.Return(buffer);
         }
 
         return true;
